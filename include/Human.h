@@ -16,7 +16,7 @@ public:
      * Choose square.
      * @return the location of the square.
      */
-    virtual Point chooseSquare();
+    virtual Point chooseSquare(vector<Point> vecPoints);
     /**
      * Return the disk.
      * @return the disk.

@@ -66,10 +66,10 @@ void Server::start() {
 void Server::handleClient(int clientSocketX, int clientSocketO) {
     int X = 1, O = 2;
     int xPoint, yPoint;
-    char c;
     //init the game
     write(clientSocketX, &X, sizeof(X));
     write(clientSocketO, &O, sizeof(O));
+
     while (true) {
         int n = read(clientSocketX, &xPoint, sizeof(xPoint));
         if (n == -1) {
@@ -80,8 +80,6 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
             cout << "Client disconnected" << endl;
             return;
         }
-
-        read(clientSocketX, &c, sizeof(c));
 
         n = read(clientSocketX, &yPoint, sizeof(yPoint));
         if (n == -1) {
@@ -106,8 +104,6 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
             cout << "Client disconnected" << endl;
             return;
         }
-
-        read(clientSocketO, &c, sizeof(c));
 
         n = read(clientSocketO, &yPoint, sizeof(yPoint));
         if (n == -1) {

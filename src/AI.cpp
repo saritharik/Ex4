@@ -9,7 +9,7 @@ char AI::getDisk() {
     return 'O';
 }
 
-Point AI::chooseSquare() {
+Point AI::chooseSquare(vector<Point> vecPoints) {
     int const startValue = 100;
     int min = startValue;
     Point choice(0,0);

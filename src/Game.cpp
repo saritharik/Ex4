@@ -36,11 +36,11 @@ void Game::playGame() {
             }
             continue;
         }
-        Point p = currentPlayer->chooseSquare();
+        Point p = currentPlayer->chooseSquare(po);
         while ((!game->possibleMoves(p, currentPlayer->getDisk()))
                || (p.getY() == 0 && p.getX() == 0)) {
             userInter->uncorrectMoves(po);
-            p = currentPlayer->chooseSquare();
+            p = currentPlayer->chooseSquare(po);
         }
         vector<Point> n1 = game->checking(p.getX(), p.getY(), currentPlayer->getDisk());
         vector<Point> n2 = game->checking(p.getX(), p.getY(), currentPlayer->getDisk());

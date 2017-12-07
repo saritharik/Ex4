@@ -7,7 +7,7 @@ using namespace std;
 Human::Human(char p): disk(p) {
     points = 0;
 }
-Point Human::chooseSquare() {
+Point Human::chooseSquare(vector<Point> vecPoints) {
     int x, y;
     char a;
     cin >> x >> a >> y;
