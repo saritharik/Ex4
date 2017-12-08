@@ -10,7 +10,8 @@ UserPrinterConsole::UserPrinterConsole() {}
 
 void UserPrinterConsole::chooseRival() {
     cout << "Select your rival player:" << endl
-         << "1 - Human player" << endl << "2 - AI player" << endl;
+         << "1 - Human player" << endl << "2 - AI player" << endl
+            << "3 - Remote player" << endl;
 }
 
 void UserPrinterConsole::startMove() {

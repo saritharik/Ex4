@@ -17,7 +17,7 @@ public:
      * @param b - the board.
      * @param game - game logic.
      */
-    Game(Player* p1, Player* p2, Board* b, GameLogic* game, UserInterface* userInter);
+    Game(Player* p1, Player* p2, Board* b, GameLogic* game, UserInterface* userInter, bool remote);
     /**
      * Running the game.
      */
@@ -29,6 +29,7 @@ private:
     Player* p2;
     GameLogic* game;
     UserInterface* userInter;
+    bool remoteGame;
 };
 
 

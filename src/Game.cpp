@@ -1,11 +1,11 @@
 #include <iostream>
 #include "../include/Game.h"
 Game::Game(Player *p1, Player *p2, Board *b, GameLogic* game,
-           UserInterface* userInter):
-        p1(p1), p2(p2), b(b), game(game), userInter(userInter) {}
+           UserInterface* userInter, bool remote):
+        p1(p1), p2(p2), b(b), game(game), userInter(userInter), remoteGame(remote) {}
 
 void Game::playGame() {
-    int count = 0;
+    bool player1 = true;
     int const startPoint = 2;
     p1->setPoint(startPoint);
     p2->setPoint(startPoint);
@@ -15,37 +15,57 @@ void Game::playGame() {
     while(p1->getPoint() + p2->getPoint() < sum) {
         userInter->startMove();
         this->b->printBoard();
-        if (count == 0) {
+        if (player1) {
             currentPlayer = p1;
         } else {
             currentPlayer = p2;
         }
-        userInter->currentPlayerMsg(currentPlayer->getDisk());
-        vector<Point> po = game->findPoints(currentPlayer->getDisk());
-        userInter->optionsToMove(po);
-        if (po.empty()) {
-            vector<Point> v1 = game->findPoints(this->p1->getDisk());
-            vector<Point> v2 = game->findPoints(this->p2->getDisk());
-            if (count == 0) {
-                count = 1;
-            } else {
-                count = 0;
-            }
-            if (v1.empty() && v2.empty()) {
+        //if (count == 0) {
+        //    currentPlayer = p1;
+        //} else {
+        //    currentPlayer = p2;
+        //}
+        Point point(-7, -7);
+        vector<Point> vecPoints;
+        if (remoteGame) {
+            vecPoints = game->findPoints(currentPlayer->getDisk());
+            point = currentPlayer->chooseSquare(vecPoints);
+            if (point.getX() == 0 && point.getY() == 0) {
+                player1 = !player1;
+                continue;
+            } else if (point.getX() == -1 && point.getY() == -1) {
                 break;
             }
-            continue;
+        } else {
+            userInter->currentPlayerMsg(currentPlayer->getDisk());
+            vecPoints = game->findPoints(currentPlayer->getDisk());
+            userInter->optionsToMove(vecPoints);
+            if (vecPoints.empty()) {
+                vector<Point> v1 = game->findPoints(this->p1->getDisk());
+                vector<Point> v2 = game->findPoints(this->p2->getDisk());
+                /*if (count == 0) {
+                    count = 1;
+                } else {
+                    count = 0;
+                }*/
+                player1 = !player1;
+                if (v1.empty() && v2.empty()) {
+                    break;
+                }
+                continue;
+            }
+            point = currentPlayer->chooseSquare(vecPoints);
+            while ((!game->possibleMoves(point, currentPlayer->getDisk()))
+                   || (point.getY() == 0 && point.getX() == 0)) {
+                userInter->uncorrectMoves(vecPoints);
+                point = currentPlayer->chooseSquare(vecPoints);
+            }
         }
-        Point p = currentPlayer->chooseSquare(po);
-        while ((!game->possibleMoves(p, currentPlayer->getDisk()))
-               || (p.getY() == 0 && p.getX() == 0)) {
-            userInter->uncorrectMoves(po);
-            p = currentPlayer->chooseSquare(po);
-        }
-        vector<Point> n1 = game->checking(p.getX(), p.getY(), currentPlayer->getDisk());
-        vector<Point> n2 = game->checking(p.getX(), p.getY(), currentPlayer->getDisk());
-        game->oneMove(p.getX(), p.getY(), currentPlayer->getDisk());
-        if (count == 0) {
+
+        vector<Point> n1 = game->checking(point.getX(), point.getY(), currentPlayer->getDisk());
+        vector<Point> n2 = game->checking(point.getX(), point.getY(), currentPlayer->getDisk());
+        game->oneMove(point.getX(), point.getY(), currentPlayer->getDisk());
+        if (player1) {
             p1->setPoint(1 + n1.size());
             game->setPlayerPoints(p1->getDisk(), p1->getPoint());
             p2->setPoint(-n1.size());
@@ -57,11 +77,12 @@ void Game::playGame() {
             game->setPlayerPoints(p1->getDisk(), p1->getPoint());
         }
         cout << endl;
-        if (count == 0) {
+        player1 = !player1;
+        /*if (count == 0) {
             count = 1;
         } else {
             count = 0;
-        }
+        }*/
     }
     this->b->printBoard();
     if (p1->getPoint() > p2->getPoint()) {

@@ -3,7 +3,6 @@
 //
 
 #include "Server.h"
-#include "../include/Point.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -65,13 +64,13 @@ void Server::start() {
 // Handle requests from a specific client
 void Server::handleClient(int clientSocketX, int clientSocketO) {
     int X = 1, O = 2;
-    int xPoint, yPoint;
+    int xPoint1, yPoint1, xPoint2, yPoint2;
     //init the game
     write(clientSocketX, &X, sizeof(X));
     write(clientSocketO, &O, sizeof(O));
 
     while (true) {
-        int n = read(clientSocketX, &xPoint, sizeof(xPoint));
+        int n = read(clientSocketX, &xPoint1, sizeof(xPoint1));
         if (n == -1) {
             cout << "Error reading x Point" << endl;
             return;
@@ -81,12 +80,13 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
             return;
         }
 
-        n = read(clientSocketX, &yPoint, sizeof(yPoint));
+        n = read(clientSocketX, &yPoint1, sizeof(yPoint1));
         if (n == -1) {
             cout << "Error reading y Point" << endl;
             return;
         }
-        Point moveX(xPoint, yPoint);
+        Point moveX(xPoint1, yPoint1);
+
         // Write the result back to the O client
         n = write(clientSocketO, &moveX, sizeof(moveX));
         if (n == -1) {
@@ -95,7 +95,7 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
         }
 
         //move to the O player
-        n = read(clientSocketO, &xPoint, sizeof(xPoint));
+        n = read(clientSocketO, &xPoint2, sizeof(xPoint2));
         if (n == -1) {
             cout << "Error reading x Point" << endl;
             return;
@@ -105,12 +105,18 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
             return;
         }
 
-        n = read(clientSocketO, &yPoint, sizeof(yPoint));
+        n = read(clientSocketO, &yPoint2, sizeof(yPoint2));
         if (n == -1) {
             cout << "Error reading y Point" << endl;
             return;
         }
-        Point moveO(xPoint, yPoint);
+        Point moveO(xPoint2, yPoint2);
+        if (xPoint1 == 0 && yPoint1 == 0 &&
+            xPoint2 == 0 && yPoint2 == 0) {
+            cout << "oo" << endl;
+            close(clientSocketX);
+            close(clientSocketO);
+        }
         // Write the result back to the X client
         n = write(clientSocketX, &moveO, sizeof(moveO));
         if (n == -1) {

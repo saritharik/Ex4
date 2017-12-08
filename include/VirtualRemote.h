@@ -2,20 +2,20 @@
 // Created by tamar on 07/12/17.
 //
 
-#ifndef EX4_REMOTE_H
-#define EX4_REMOTE_H
+#ifndef EX4_VIRTUALREMOTE_H
+#define EX4_VIRTUALREMOTE_H
 
 #include "Player.h"
 #include "Client.h"
 
-class Remote: public Player {
+class VirtualRemote: public Player {
 public:
     /**
      * constructor
      * @param client - pointer to client, for connect to the server
      * @param disk - the disk of this player
      */
-    Remote(Client* client, char disk);
+    VirtualRemote(Client* client, char disk);
     /**
      * Choose square.
      * @return the location of the square.
@@ -41,5 +41,4 @@ private:
     char disk;
     int points;
 };
-
-#endif //EX4_REMOTE_H
+#endif //EX4_VIRTUALREMOTE_H

@@ -6,6 +6,7 @@
 #define EX4_SERVER_H
 
 
+#include "../include/Point.h"
 class Server {
 public:
     Server(int port);

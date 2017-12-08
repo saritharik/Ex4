@@ -9,12 +9,15 @@ include_directories(lib/googletest-release-1.8.0/googlemock/include)
 set(SOURCE_FILES src/BoardConsole.cpp include/BoardConsole.h src/GameLogic.cpp include/GameLogic.h
         src/Point.cpp include/Point.h include/Board.h include/Player.h src/Human.cpp include/Human.h
         src/AI.cpp include/AI.h src/Game.cpp include/Game.h include/UserInterface.h
-        include/UserPrinterConsole.h src/UserPrinterConsole.cpp server/Server.cpp server/Server.h include/Remote.h src/Remote.cpp include/Client.h src/Client.cpp)
+        include/UserPrinterConsole.h src/UserPrinterConsole.cpp include/Remote.h src/Remote.cpp
+        include/Client.h src/Client.cpp include/VirtualRemote.h src/VirtualRemote.cpp)
 set(TEST_FILES tests/BoardTest.cpp
         tests/BoardTest.h tests/AITest.cpp tests/AITest.h tests/HumanTest.cpp tests/HumanTest.h
         tests/PointTest.cpp tests/PointTest.h  tests/GameLogicTest.cpp tests/GameLogicTest.h)
+set(SERVER_FILES server/Server.cpp server/Server.h)
 
 add_executable(Ex4 ${SOURCE_FILES} src/main.cpp)
 add_executable(tests ${SOURCE_FILES} ${TEST_FILES} tests/gtest_main.cpp)
+add_executable(server ${SOURCE_FILES} ${SERVER_FILES} server/server_main.cpp)
 
 target_link_libraries(tests gtest gtest_main gmock)
