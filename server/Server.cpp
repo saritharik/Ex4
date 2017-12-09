@@ -1,14 +1,9 @@
-//
-// Created by tamar on 07/12/17.
-//
-
 #include "Server.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <string.h>
 #include <iostream>
-#include <stdio.h>
 using namespace std;
 #define MAX_CONNECTED_CLIENTS 2
 

@@ -1,10 +1,19 @@
 #include <iostream>
 #include <cstdlib>
 #include "Server.h"
-#include <stdlib.h>
+#include <fstream>
 using namespace std;
 int main() {
-    Server server(8000);
+    int port;
+    char temp;
+    ifstream reader;
+    reader.open("../serverSettings.txt");
+    reader >> temp;
+    while (temp != '=') {
+        reader >> temp;
+    }
+    reader >> port;
+    Server server(port);
     try {
         server.start();
     } catch (const char *msg) {

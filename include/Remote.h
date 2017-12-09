@@ -1,12 +1,9 @@
-//
-// Created by tamar on 07/12/17.
-//
-
 #ifndef EX4_REMOTE_H
 #define EX4_REMOTE_H
 
 #include "Player.h"
 #include "Client.h"
+#include "UserInterface.h"
 
 class Remote: public Player {
 public:
@@ -15,7 +12,7 @@ public:
      * @param client - pointer to client, for connect to the server
      * @param disk - the disk of this player
      */
-    Remote(Client* client, char disk);
+    Remote(Client* client, char disk, UserInterface* printer);
     /**
      * Choose square.
      * @return the location of the square.
@@ -40,6 +37,7 @@ private:
     Client* client;
     char disk;
     int points;
+    UserInterface* printer;
 };
 
 #endif //EX4_REMOTE_H

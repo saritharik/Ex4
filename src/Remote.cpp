@@ -8,7 +8,8 @@
 
 using namespace std;
 
-Remote::Remote(Client* client1, char d): client(client1), disk(d) {
+Remote::Remote(Client* client1, char d, UserInterface* printer):
+        client(client1), disk(d), printer(printer) {
     //this->disk = client->connectToServer();
 }
 
@@ -20,15 +21,17 @@ Point Remote::chooseSquare(vector<Point> vecPoints) {
         client->sendMessage(Point(0, 0));
         return Point(0,0);
     }
-    cout << disk << ": it's your move." << endl;
-    cout << "Your possible moves:";
+    printer->currentPlayerMsg(disk);
+    //cout << disk << ": it's your move." << endl;
+    printer->optionsToMove(vecPoints);
+    /*cout << "Your possible moves:";
     vector<Point>::iterator iter;
     for(iter = vecPoints.begin(); iter != vecPoints.end(); iter++) {
         cout << "(" << iter.base()->getX() << ", "
              << iter.base()->getY() << ")";
     }
     cout << endl << endl;
-    cout << "Please enter your move row,col: (example: x,y)";
+    cout << "Please enter your move row,col: (example: x,y)";*/
 
 
     while (b == false) {

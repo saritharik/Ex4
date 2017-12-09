@@ -6,6 +6,7 @@
 #include "../include/Client.h"
 #include "../include/Remote.h"
 #include "../include/VirtualRemote.h"
+#include <fstream>
 
 using namespace std;
 
@@ -27,22 +28,42 @@ int main() {
         Game game(&p1, &p2, &bC, &gameLogic, &printer, false);
         game.playGame();
     } else if (choice == 3) {
+        /*int port;
+        string IP;
+        char temp;
+        string name;
+        ifstream reader;
+        reader.open("../clientSettings.txt");
+        reader >> name;
+        if (name == "IP") {
+            reader >> temp >> IP;
+            reader >> name;
+            if (name == "port") {
+                reader >> temp >> port;
+            }
+        } else if (name == "port"){
+            reader >> temp >> port;
+            reader >> name;
+            if (name == "IP") {
+                reader >> temp >> IP;
+            }
+        }
+        cout << port << endl << IP << endl;*/
         Client client("127.0.0.1", 8000);
         char disk = client.connectToServer();
-        Remote player1(&client, disk);
+        Remote player1(&client, disk, &printer);
         char rivalDisk = ' ';
         if (disk == 'X') {
             rivalDisk = 'O';
-            VirtualRemote player2(&client, rivalDisk);
+            VirtualRemote player2(&client, rivalDisk, &printer);
             Game game(&player1, &player2, &bC, &gameLogic, &printer, true);
             game.playGame();
         } else if (disk == 'O') {
             rivalDisk = 'X';
-            VirtualRemote player2(&client, rivalDisk);
+            VirtualRemote player2(&client, rivalDisk, &printer);
             Game game(&player2, &player1, &bC, &gameLogic, &printer, true);
             game.playGame();
         }
-
     }
 
     return 0;

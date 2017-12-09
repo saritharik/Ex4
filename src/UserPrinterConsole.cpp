@@ -58,3 +58,16 @@ void UserPrinterConsole::endOfGame(char disk) {
         cout << "The game ended in a draw";
     }
 }
+
+void UserPrinterConsole::remoteHelpPrinter() {
+    cout << "Waiting for other player's move..." << endl;
+}
+
+void UserPrinterConsole::remotePlayerMsg(char disk, Point point) {
+    if (disk == 'O') {
+        cout << "O";
+    } else {
+        cout << "X ";
+    }
+    cout << "played (" << point.getX() << "," << point.getY() << ")" << endl;
+}

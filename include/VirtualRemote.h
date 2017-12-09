@@ -1,12 +1,9 @@
-//
-// Created by tamar on 07/12/17.
-//
-
 #ifndef EX4_VIRTUALREMOTE_H
 #define EX4_VIRTUALREMOTE_H
 
 #include "Player.h"
 #include "Client.h"
+#include "UserInterface.h"
 
 class VirtualRemote: public Player {
 public:
@@ -15,7 +12,7 @@ public:
      * @param client - pointer to client, for connect to the server
      * @param disk - the disk of this player
      */
-    VirtualRemote(Client* client, char disk);
+    VirtualRemote(Client* client, char disk, UserInterface* printer);
     /**
      * Choose square.
      * @return the location of the square.
@@ -40,5 +37,6 @@ private:
     Client* client;
     char disk;
     int points;
+    UserInterface* printer;
 };
 #endif //EX4_VIRTUALREMOTE_H
