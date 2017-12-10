@@ -42,17 +42,20 @@ void Server::start() {
         if (clientSocketX == -1)
             throw "Error on accept";
         cout << "First client connected, wait to another client" << endl;
+        int X = 1;
+        int O = 2;
+        write(clientSocketX, &X, sizeof(X));
         int clientSocketO = accept(serverSocket, (struct
                 sockaddr *)&clientAddressO, &clientAddressLenO);
         if (clientSocketO == -1)
             throw "Error on accept";
         cout << "Client connected" << endl;
+        write(clientSocketO, &O, sizeof(O));
 
         handleClient(clientSocketX, clientSocketO);
         // Close communication with the client
         close(clientSocketX);
         close(clientSocketO);
-
     }
 }
 
@@ -60,6 +63,7 @@ void Server::start() {
 void Server::handleClient(int clientSocketX, int clientSocketO) {
     int X = 1, O = 2;
     int xPoint1, yPoint1, xPoint2, yPoint2;
+
     //init the game
     write(clientSocketX, &X, sizeof(X));
     write(clientSocketO, &O, sizeof(O));
@@ -72,6 +76,8 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
         }
         if (n == 0) {
             cout << "Client disconnected" << endl;
+            //close(clientSocketO);
+            //close(clientSocketX);
             return;
         }
 
@@ -81,6 +87,10 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
             return;
         }
         Point moveX(xPoint1, yPoint1);
+        if (xPoint1 == -1 && yPoint1 == -1) {
+            //close(clientSocketX);
+            return;
+        }
 
         // Write the result back to the O client
         n = write(clientSocketO, &moveX, sizeof(moveX));
@@ -97,6 +107,8 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
         }
         if (n == 0) {
             cout << "Client disconnected" << endl;
+            //close(clientSocketX);
+            //close(clientSocketO);
             return;
         }
 
@@ -106,12 +118,11 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
             return;
         }
         Point moveO(xPoint2, yPoint2);
-        if (xPoint1 == 0 && yPoint1 == 0 &&
-            xPoint2 == 0 && yPoint2 == 0) {
-            cout << "oo" << endl;
-            close(clientSocketX);
-            close(clientSocketO);
+        if (xPoint2 == -1 && yPoint2 == -1) {
+            //close(clientSocketO);
+            return;
         }
+
         // Write the result back to the X client
         n = write(clientSocketX, &moveO, sizeof(moveO));
         if (n == -1) {

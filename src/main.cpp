@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "../include/GameLogic.h"
 #include "../include/AI.h"
 #include "../include/Game.h"
@@ -6,7 +7,6 @@
 #include "../include/Client.h"
 #include "../include/Remote.h"
 #include "../include/VirtualRemote.h"
-#include <fstream>
 
 using namespace std;
 
@@ -28,7 +28,7 @@ int main() {
         Game game(&p1, &p2, &bC, &gameLogic, &printer, false);
         game.playGame();
     } else if (choice == 3) {
-        /*int port;
+     /*   int port;
         string IP;
         char temp;
         string name;
@@ -47,9 +47,28 @@ int main() {
             if (name == "IP") {
                 reader >> temp >> IP;
             }
+        }*/
+        int port;
+        char IP[10];
+        char temp;
+        ifstream reader;
+        reader.open("../clientSettings.txt");
+        reader >> temp;
+        while (temp != '=') {
+            reader >> temp;
         }
-        cout << port << endl << IP << endl;*/
-        Client client("127.0.0.1", 8000);
+        reader >> port;
+        reader >> temp;
+        while (temp != '=') {
+            reader >> temp;
+        }
+        reader >> IP;
+        IP[9] = '\n';
+        cout << port << endl << IP << endl;
+        reader.close();
+        Client client(IP, port);
+        //Client client("127.0.0.1", 8000);
+
         char disk = client.connectToServer();
         Remote player1(&client, disk, &printer);
         char rivalDisk = ' ';
@@ -65,6 +84,5 @@ int main() {
             game.playGame();
         }
     }
-
     return 0;
 }

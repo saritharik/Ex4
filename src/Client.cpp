@@ -53,8 +53,18 @@ char Client::connectToServer() {
         throw "Error connecting to server";
     }
     cout << "Connected to server" << endl;
+    int firstPlayer;
+    int n = read(clientSocket, &firstPlayer, sizeof(firstPlayer));
+    if (n == -1) {
+        throw "Error reading from socket";
+    }
+    if (firstPlayer == 1) {
+        cout << "Waiting for other player to join..." << endl;
+    } else if (firstPlayer == 2) {
+
+    }
     int result;
-    int n = read(clientSocket, &result, sizeof(result));
+    n = read(clientSocket, &result, sizeof(result));
     if (n == -1) {
         throw "Error reading the player type from socket";
     }

@@ -65,7 +65,7 @@ void UserPrinterConsole::remoteHelpPrinter() {
 
 void UserPrinterConsole::remotePlayerMsg(char disk, Point point) {
     if (disk == 'O') {
-        cout << "O";
+        cout << "O ";
     } else {
         cout << "X ";
     }

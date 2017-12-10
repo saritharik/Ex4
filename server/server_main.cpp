@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include "Server.h"
 #include <fstream>
+
 using namespace std;
 int main() {
     int port;
@@ -13,6 +14,7 @@ int main() {
         reader >> temp;
     }
     reader >> port;
+    reader.close();
     Server server(port);
     try {
         server.start();
