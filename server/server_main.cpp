@@ -8,7 +8,7 @@ int main() {
     int port;
     char temp;
     ifstream reader;
-    reader.open("../serverSettings.txt");
+    reader.open("../exe/serverSettings.txt");
     reader >> temp;
     while (temp != '=') {
         reader >> temp;

@@ -28,31 +28,11 @@ int main() {
         Game game(&p1, &p2, &bC, &gameLogic, &printer, false);
         game.playGame();
     } else if (choice == 3) {
-     /*   int port;
-        string IP;
-        char temp;
-        string name;
-        ifstream reader;
-        reader.open("../clientSettings.txt");
-        reader >> name;
-        if (name == "IP") {
-            reader >> temp >> IP;
-            reader >> name;
-            if (name == "port") {
-                reader >> temp >> port;
-            }
-        } else if (name == "port"){
-            reader >> temp >> port;
-            reader >> name;
-            if (name == "IP") {
-                reader >> temp >> IP;
-            }
-        }*/
         int port;
         char IP[10];
         char temp;
         ifstream reader;
-        reader.open("../clientSettings.txt");
+        reader.open("../exe/clientSettings.txt");
         reader >> temp;
         while (temp != '=') {
             reader >> temp;
@@ -64,7 +44,6 @@ int main() {
         }
         reader >> IP;
         IP[9] = '\n';
-        cout << port << endl << IP << endl;
         reader.close();
         Client client(IP, port);
         //Client client("127.0.0.1", 8000);

@@ -35,13 +35,13 @@ void Server::start() {
     socklen_t clientAddressLenO;
 
     while (true) {
-        cout << "Waiting for client connections..." << endl;
+        printer.waitToConnection();
         // Accept a new client connection
         int clientSocketX = accept(serverSocket, (struct
                 sockaddr *)&clientAddressX, &clientAddressLenX);
         if (clientSocketX == -1)
             throw "Error on accept";
-        cout << "First client connected, wait to another client" << endl;
+        printer.waitToOtherClient();
         int X = 1;
         int O = 2;
         write(clientSocketX, &X, sizeof(X));
@@ -49,7 +49,7 @@ void Server::start() {
                 sockaddr *)&clientAddressO, &clientAddressLenO);
         if (clientSocketO == -1)
             throw "Error on accept";
-        cout << "Client connected" << endl;
+        printer.connect();
         write(clientSocketO, &O, sizeof(O));
 
         handleClient(clientSocketX, clientSocketO);
@@ -71,50 +71,45 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
     while (true) {
         int n = read(clientSocketX, &xPoint1, sizeof(xPoint1));
         if (n == -1) {
-            cout << "Error reading x Point" << endl;
+            printer.errorRead('x');
             return;
         }
         if (n == 0) {
-            cout << "Client disconnected" << endl;
-            //close(clientSocketO);
-            //close(clientSocketX);
+            printer.disconnect();
             return;
         }
 
         n = read(clientSocketX, &yPoint1, sizeof(yPoint1));
         if (n == -1) {
-            cout << "Error reading y Point" << endl;
+            printer.errorRead('y');
             return;
         }
         Point moveX(xPoint1, yPoint1);
         if (xPoint1 == -1 && yPoint1 == -1) {
-            //close(clientSocketX);
             return;
         }
 
         // Write the result back to the O client
         n = write(clientSocketO, &moveX, sizeof(moveX));
         if (n == -1) {
-            cout << "Error writing to socket" << endl;
+            printer.errorWrite();
             return;
         }
 
         //move to the O player
         n = read(clientSocketO, &xPoint2, sizeof(xPoint2));
         if (n == -1) {
-            cout << "Error reading x Point" << endl;
+            printer.errorRead('x');
             return;
         }
         if (n == 0) {
-            cout << "Client disconnected" << endl;
-            //close(clientSocketX);
-            //close(clientSocketO);
+            printer.disconnect();
             return;
         }
 
         n = read(clientSocketO, &yPoint2, sizeof(yPoint2));
         if (n == -1) {
-            cout << "Error reading y Point" << endl;
+            printer.errorRead('y');
             return;
         }
         Point moveO(xPoint2, yPoint2);
@@ -126,7 +121,7 @@ void Server::handleClient(int clientSocketX, int clientSocketO) {
         // Write the result back to the X client
         n = write(clientSocketX, &moveO, sizeof(moveO));
         if (n == -1) {
-            cout << "Error writing to socket" << endl;
+            printer.errorWrite();
             return;
         }
     }

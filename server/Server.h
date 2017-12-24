@@ -3,6 +3,8 @@
 
 
 #include "../include/Point.h"
+#include "ServerPrinter.h"
+
 class Server {
 public:
     /**
@@ -22,6 +24,7 @@ private:
     int port;
     int serverSocket; // the socket's file descriptor
     void handleClient(int clientSocketX, int clientSocketO);
+    ServerPrinter printer;
 };
 
 
